@@ -1,3 +1,4 @@
 .venv-ds/
 .DS_STORE
 logs/
+artifacts/
