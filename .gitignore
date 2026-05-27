@@ -2,3 +2,6 @@
 .DS_STORE
 logs/
 artifacts/
+__pycache__/
+*.py[cod]
+*$py.class
