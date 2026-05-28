@@ -25,6 +25,13 @@ class ModelEvaluation:
         return rmse, mae, r2
 
     def log_into_mlflow(self):
+        mlflow_password = os.getenv("MLFLOW_TRACKING_PASSWORD")
+
+        if not mlflow_password:
+            raise ValueError(
+                "MLFLOW_TRACKING_PASSWORD is not set. "
+                "Please export it locally before running model evaluation."
+            )
         test_data = pd.read_csv(self.config.test_data_path)
         model = joblib.load(self.config.model_path)
 
