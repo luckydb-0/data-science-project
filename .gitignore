@@ -5,3 +5,5 @@ artifacts/
 __pycache__/
 *.py[cod]
 *$py.class
+mlflow.db
+
