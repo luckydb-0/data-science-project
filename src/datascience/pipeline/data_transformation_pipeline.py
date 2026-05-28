@@ -6,7 +6,7 @@ from src.datascience import logger
 
 STAGE_NAME = 'Data Transformation Stage'
 
-class DataTransformationTrainingPipeline:
+class DataTransformationPipeline:
     def __init__(self):
         pass
 
