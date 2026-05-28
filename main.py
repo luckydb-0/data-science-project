@@ -5,53 +5,41 @@ from src.datascience.pipeline.data_transformation_pipeline import DataTransforma
 from src.datascience.pipeline.model_trainer_pipeline import ModelTrainingPipeline
 from src.datascience.pipeline.model_evaluation_pipeline import ModelEvaluationPipeline
 
+def run_stage(stage_name: str, stage_callable) -> None:
+    """
+    Run a single pipeline stage with logging and error handling.
+    """
+    try:
+        logger.info(f">>>>> stage {stage_name} started <<<<<")
+        stage_callable()
+        logger.info(f">>>>> stage {stage_name} completed <<<<<\n")
+    except Exception:
+        logger.exception(f"Error occurred while running stage: {stage_name}")
+        raise
 
-STAGE_NAME = 'Data Ingestion Stage'
-try:
-    logger.info(f'>>>>> stage {STAGE_NAME} started <<<<<')
-    obj = DataIngestionPipeline()
-    obj.initiate_data_ingestion()
-    logger.info(f'>>>>> stage {STAGE_NAME} completed <<<<<\n')
-except Exception as e:
-    logger.exception(e)
-    raise e
+if __name__ == "__main__":
+    stages = [
+        (
+            "Data Ingestion Stage",
+            lambda: DataIngestionPipeline().initiate_data_ingestion(),
+        ),
+        (
+            "Data Validation Stage",
+            lambda: DataValidationPipeline().initiate_data_validation(),
+        ),
+        (
+            "Data Transformation Stage",
+            lambda: DataTransformationPipeline().initiate_data_transformation(),
+        ),
+        (
+            "Model Training Stage",
+            lambda: ModelTrainingPipeline().initiate_model_training(),
+        ),
+        (
+            "Model Evaluation Stage",
+            lambda: ModelEvaluationPipeline().model_evaluation(),
+        ),
+    ]
 
-STAGE_NAME = 'Data Validation Stage'
-try:
-    logger.info(f'>>>>> stage {STAGE_NAME} started <<<<<')
-    obj = DataValidationPipeline()
-    obj.initiate_data_validation()
-    logger.info(f'>>>>> stage {STAGE_NAME} completed <<<<<\n')
-except Exception as e:
-    logger.exception(e)
-    raise e
-
-STAGE_NAME = 'Data Transformation Stage'
-try:
-    logger.info(f'>>>>> stage {STAGE_NAME} started <<<<<')
-    obj = DataTransformationPipeline()
-    obj.initiate_data_transformation()
-    logger.info(f'>>>>> stage {STAGE_NAME} completed <<<<<\n')
-except Exception as e:
-    logger.exception(e)
-    raise e
-
-STAGE_NAME = 'Model Training Stage'
-try:
-    logger.info(f'>>>>> stage {STAGE_NAME} started <<<<<')
-    obj = ModelTrainingPipeline()
-    obj.initiate_model_training()
-    logger.info(f'>>>>> stage {STAGE_NAME} completed <<<<<\n')
-except Exception as e:
-    logger.exception(e)
-    raise e
-
-STAGE_NAME = 'Model Evaluation Stage'
-try:
-    logger.info(f'>>>>> stage {STAGE_NAME} started <<<<<')
-    obj = ModelEvaluationPipeline()
-    obj.model_evaluation()
-    logger.info(f'>>>>> stage {STAGE_NAME} completed <<<<<\n')
-except Exception as e:
-    logger.exception(e)
-    raise e
+    for stage_name, stage_callable in stages:
+        run_stage(stage_name, stage_callable)
